@@ -4,13 +4,13 @@
     namespace: "{{ vm_namespace }}"
   register: vm_info
   
- - name: Get all VirtualMachines in the namespace
-   kubernetes.core.k8s_info:
-     api_version: kubevirt.io/v1
-     kind: VirtualMachine
-     namespace: "{{ vm_namespace }}"
+- name: Get all VirtualMachines in the namespace
+  kubernetes.core.k8s_info:
+    api_version: kubevirt.io/v1
+    kind: VirtualMachine
+    namespace: "{{ vm_namespace }}"
   register: vm_list
-      
+
 - name: Print VM names
   ansible.builtin.debug:
     msg: "{{ vm_list.resources | map(attribute='metadata.name') | list }}"
