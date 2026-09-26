@@ -1,7 +1,8 @@
 ---
 - name: Get all VirtualMachines in the namespace
   redhat.openshift_virtualization.kubevirt_vm_info:
-    namespace: "{{ vm_namespace }}"
+    #namespace: "{{ vm_namespace }}"
+    namespace: "ravi"
   register: vm_info
 
 - name: Debug the vm_info variable
