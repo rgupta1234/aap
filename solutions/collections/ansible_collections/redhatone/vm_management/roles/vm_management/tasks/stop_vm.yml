@@ -4,6 +4,10 @@
     namespace: "{{ vm_namespace }}"
   register: vm_info
 
+- name: Print VM names
+  ansible.builtin.debug:
+    msg: "{{ vm_list.resources | map(attribute='metadata.name') | list }}"
+
 - name: Debug the vm_info variable
   ansible.builtin.debug:
     var: vm_info
