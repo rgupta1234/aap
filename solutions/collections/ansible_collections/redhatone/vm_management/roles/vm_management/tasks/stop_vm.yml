@@ -2,6 +2,7 @@
 - name: Get all VirtualMachines in the namespace
   redhat.openshift_virtualization.kubevirt_vm_info:
     namespace: "{{ vm_namespace }}"
+    name: "{{ vm_name | default(omit) }}"
   register: vm_info
   
 - name: Get all VirtualMachines in the namespace
@@ -9,6 +10,7 @@
     api_version: kubevirt.io/v1
     kind: VirtualMachine
     namespace: "{{ vm_namespace }}"
+    name: "{{ vm_name | default(omit) }}"
   register: vm_list
 
 - name: Print VM names

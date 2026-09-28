@@ -5,5 +5,5 @@
     file: _snapshot_vm.yml
   loop_control:
     loop_var: vm_to_snapshot
-  loop: "{{ vms_to_snapshot.replace(' ','').split(',') }}"
-  when: vms_to_snapshot | default('', True) | length > 0
+  loop: "{{ (vms_to_snapshot | default(vm_name | default(''), True)).replace(' ','').split(',') }}"
+  when: (vms_to_snapshot | default(vm_name | default(''), True)) | length > 0
