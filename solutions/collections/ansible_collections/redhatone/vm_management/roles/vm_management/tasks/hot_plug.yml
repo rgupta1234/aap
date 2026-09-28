@@ -1,6 +1,13 @@
+- name: Verify VM name provided
+  ansible.builtin.assert:
+    that:
+      - vm_name | default('', True) | length > 0
+    quiet: true
+    fail_msg: vm_name is required
+
 - name: Swap Instance Type to add more Resources
   redhat.openshift_virtualization.kubevirt_vm:
-    name: "{{ vm_name | default('rhel9-vm1') }}"
+    name: "{{ vm_name }}"
     namespace: "{{ vm_namespace }}"
     state: present
     run_strategy: Always
