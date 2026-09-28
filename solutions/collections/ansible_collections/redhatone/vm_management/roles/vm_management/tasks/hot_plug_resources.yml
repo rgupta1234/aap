@@ -24,16 +24,19 @@
     kind: VirtualMachine
     name: "{{ vm_name }}"
     namespace: "{{ vm_namespace }}"
-    definition:
+    # rendered via from_yaml so sockets is sent as an integer, not a string
+    definition: "{{ vm_resource_patch | from_yaml }}"
+  vars:
+    vm_resource_patch: |
       spec:
         instancetype: null
         template:
           spec:
             domain:
               cpu:
-                sockets: "{{ vm_cpus | int }}"
+                sockets: {{ vm_cpus | int }}
                 cores: 1
                 threads: 1
               memory:
-                guest: "{{ vm_memory }}"
+                guest: {{ vm_memory }}
               resources: null
