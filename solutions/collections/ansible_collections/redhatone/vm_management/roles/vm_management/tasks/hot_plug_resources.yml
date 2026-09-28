@@ -1,0 +1,39 @@
+- name: Verify VM name provided
+  ansible.builtin.assert:
+    that:
+      - vm_name | default('', True) | length > 0
+    quiet: true
+    fail_msg: vm_name is required
+
+- name: Verify CPU and memory provided
+  ansible.builtin.assert:
+    that:
+      - vm_cpus is defined
+      - vm_cpus | string is match('^[1-9][0-9]*$')
+      - vm_memory is defined
+      - vm_memory is match('^[1-9][0-9]*(Mi|Gi)$')
+    quiet: true
+    fail_msg: "vm_cpus (positive integer) and vm_memory (e.g. 4Gi or 4096Mi) are required"
+
+# instancetype must be removed (null in a merge patch) or it conflicts with explicit cpu/memory
+- name: Hot plug CPU and memory
+  kubernetes.core.k8s:
+    state: patched
+    merge_type: merge
+    api_version: kubevirt.io/v1
+    kind: VirtualMachine
+    name: "{{ vm_name }}"
+    namespace: "{{ vm_namespace }}"
+    definition:
+      spec:
+        instancetype: null
+        template:
+          spec:
+            domain:
+              cpu:
+                sockets: "{{ vm_cpus | int }}"
+                cores: 1
+                threads: 1
+              memory:
+                guest: "{{ vm_memory }}"
+              resources: null
